@@ -1,6 +1,4 @@
-import numpy as np
 import random
-import matplotlib as plot
 import pandas as pd
 
 tam_poblacion = 50
@@ -13,7 +11,7 @@ array_fitness = [0] * tam_poblacion
 distancias = pd.read_excel('TablaCapitales.xlsx')
 distancias = distancias.to_numpy()
 
-for k in range(0, 23):
+for k in range(0, cant_provincias):
     nombre_capitales[k] = distancias[k][0]
 
 distancias = pd.read_excel('TablaCapitales.xlsx', index_col=0)
@@ -55,12 +53,16 @@ def crossover():
             array_poblacion[i + 1] = ciclico(padre2, padre1)
 
 
-def fitness():
-    aux_fitness = 0
-    for i in range(0, cant_provincias):
-        aux_fitness += distancias[array_poblacion[i]][array_poblacion[i + 1]]
+def fitness(cromosoma):  # Devuelve el fitness de un solo cromosoma (La distancia total del recorrido en km)
+    acum_fitness = 0
+    for i in range(0, cant_provincias-1):
+        acum_fitness += distancias[cromosoma[i], cromosoma[i + 1]]
+
+    # Suma tambien la distancia de la ultima ciudad hasta la ciudad de partida
+    acum_fitness += distancias[cromosoma[cant_provincias - 1], cromosoma[0]]
+
+    return acum_fitness
 
 
 poblacion_inicial()
 crossover()
-fitness()
