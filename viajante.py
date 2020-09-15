@@ -25,22 +25,28 @@ def poblacion_inicial():
         array_poblacion[i] = cromosoma
 
 
-def rank():
-    aux_fitness_indices = np.argsort(array_fitness)[::-1]
-    aux_poblacion = [0] * tam_poblacion
-    total_fitness = int((tam_poblacion * (tam_poblacion + 1)) / 2)
+def ruleta():
+    base = 0
+    cant_casilleros = 0
+
     for i in range(0, tam_poblacion):
-        aux_poblacion[i] = array_poblacion[aux_fitness_indices[i]]
-    valor_ruleta = [0] * total_fitness
-    cont = 0
+        casilleros = round(array_fitness[i] * 1000)
+        cant_casilleros = cant_casilleros + casilleros
+    roulette = [0] * cant_casilleros
+
     for i in range(0, tam_poblacion):
-        for j in range(0, i+1):
-            valor_ruleta[cont] = i
-            cont += 1
+        casilleros = round(array_fitness[i] * 1000)
+
+        for j in range(base, base + casilleros):
+            roulette[j] = i
+        base = base + casilleros
+
+    bolilla = random.randint(0, cant_casilleros - 1)
+
     nueva_poblacion = [0] * tam_poblacion
     for i in range(0, tam_poblacion):
-        nueva_poblacion[i] = aux_poblacion[valor_ruleta[random.randint(0, total_fitness-1)]]
-    print()
+        nueva_poblacion[i] = array_poblacion[roulette[bolilla]]
+
     return nueva_poblacion
 
 
@@ -74,22 +80,32 @@ def crossover():
 
 
 def calcula_distancia_recorrido(cromosoma):  # Devuelve el fitness de un solo cromosoma
-    acum_fitness = 0
+    dist_recorrido = 0
     for i in range(0, cant_ciudades - 1):
-        acum_fitness += distancias[cromosoma[i], cromosoma[i + 1]]
+        dist_recorrido += distancias[cromosoma[i], cromosoma[i + 1]]
 
     # Suma tambien la distancia de la ultima ciudad hasta la ciudad de partida
-    acum_fitness += distancias[cromosoma[cant_ciudades - 1], cromosoma[0]]
+    dist_recorrido += distancias[cromosoma[cant_ciudades - 1], cromosoma[0]]
 
-    return acum_fitness
+    return dist_recorrido
 
 
 def calcula_fitness_poblacion():
+    array_distancias = [0] * tam_poblacion
     for i in range(0, tam_poblacion):
-        array_fitness[i] = calcula_distancia_recorrido(array_poblacion[i])
+        array_distancias[i] = calcula_distancia_recorrido(array_poblacion[i])
+    distancia_total = np.sum(array_distancias)
+    for i in range(0, tam_poblacion):
+        array_fitness[i] = distancia_total - array_distancias[i]
+    sumatoria_complementos = np.sum(array_fitness)
+    for i in range(0, tam_poblacion):
+        array_fitness[i] = array_fitness[i] / sumatoria_complementos
 
 
 poblacion_inicial()
+calcula_fitness_poblacion()
+array_poblacion = ruleta()
 crossover()
 calcula_fitness_poblacion()
-array_poblacion = rank()
+print(array_poblacion)
+
