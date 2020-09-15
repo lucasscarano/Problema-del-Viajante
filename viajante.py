@@ -2,30 +2,30 @@ import random
 import pandas as pd
 
 tam_poblacion = 50
-cant_provincias = 23
+cant_ciudades = 24
 chances_crossover = 0.75
 array_poblacion = [0] * tam_poblacion
-nombre_capitales = [0] * cant_provincias
+nombres_ciudades = [0] * cant_ciudades
 array_fitness = [0] * tam_poblacion
 
-distancias = pd.read_excel('TablaCapitales.xlsx')
-distancias = distancias.to_numpy()
+# Se guarda el Excel en un DataFrame de Pandas
+df_ciudades_distancias = pd.read_excel('TablaCiudades.xlsx')
 
-for k in range(0, cant_provincias):
-    nombre_capitales[k] = distancias[k][0]
+# Extrae la cabecera de la tabla con los nombres de las ciudades en una lista
+nombres_ciudades = list(df_ciudades_distancias)
 
-distancias = pd.read_excel('TablaCapitales.xlsx', index_col=0)
-distancias = distancias.to_numpy()
+# Extrae solo las distancias entre las ciudades en un arreglo Numpy 2D
+distancias = df_ciudades_distancias.tail(cant_ciudades).to_numpy()
 
 
 def poblacion_inicial():
     for i in range(0, tam_poblacion):
-        cromosoma = random.sample(range(cant_provincias), cant_provincias)
+        cromosoma = random.sample(range(cant_ciudades), cant_ciudades)
         array_poblacion[i] = cromosoma
 
 
 def ciclico(padre1, padre2):
-    hijo = [None] * cant_provincias
+    hijo = [None] * cant_ciudades
     j = 0
     hijo[j] = padre1[j]
     flag = True
@@ -36,7 +36,7 @@ def ciclico(padre1, padre2):
             hijo[j] = padre1[j]
         else:
             flag = False
-    for j in range(1, cant_provincias):
+    for j in range(1, cant_ciudades):
         if hijo[j] is None:
             hijo[j] = padre2[j]
 
@@ -55,11 +55,11 @@ def crossover():
 
 def fitness(cromosoma):  # Devuelve el fitness de un solo cromosoma (La distancia total del recorrido en km)
     acum_fitness = 0
-    for i in range(0, cant_provincias-1):
+    for i in range(0, cant_ciudades-1):
         acum_fitness += distancias[cromosoma[i], cromosoma[i + 1]]
 
     # Suma tambien la distancia de la ultima ciudad hasta la ciudad de partida
-    acum_fitness += distancias[cromosoma[cant_provincias - 1], cromosoma[0]]
+    acum_fitness += distancias[cromosoma[cant_ciudades - 1], cromosoma[0]]
 
     return acum_fitness
 
