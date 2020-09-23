@@ -42,6 +42,48 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager" selected="Python.viajante">
+    <configuration name="get-pip" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Problema-del-Viajante" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="D:/Descargas" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="D:/Descargas/get-pip.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Problema-del-Viajante" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="scratch_1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Problema-del-Viajante" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -84,6 +126,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.viajante" />
+        <item itemvalue="Python.scratch" />
+        <item itemvalue="Python.get-pip" />
         <item itemvalue="Python.scratch_1" />
       </list>
     </recent_temporary>
@@ -116,21 +160,25 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="731" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1600210901869" />
-    <state width="1899" height="282" key="GridCell.Tab.0.bottom" timestamp="1600472730044">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1345" height="179" key="GridCell.Tab.0.bottom" timestamp="1600818438188">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="1345" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1600818438188" />
     <state width="1899" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1600472730044" />
-    <state width="1899" height="282" key="GridCell.Tab.0.center" timestamp="1600472730043">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1345" height="179" key="GridCell.Tab.0.center" timestamp="1600818438188">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="1345" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1600818438188" />
     <state width="1899" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1600472730043" />
-    <state width="1899" height="282" key="GridCell.Tab.0.left" timestamp="1600472730043">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1345" height="179" key="GridCell.Tab.0.left" timestamp="1600818438188">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="1345" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1600818438188" />
     <state width="1899" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1600472730043" />
-    <state width="1899" height="282" key="GridCell.Tab.0.right" timestamp="1600472730044">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1345" height="179" key="GridCell.Tab.0.right" timestamp="1600818438188">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="1345" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1600818438188" />
     <state width="1899" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1600472730044" />
     <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1600471813151">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -148,13 +196,15 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1600471813151" />
-    <state x="461" y="165" key="SettingsEditor" timestamp="1600197979430">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="328" y="18" key="SettingsEditor" timestamp="1600812047857">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state x="328" y="18" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1600812047857" />
     <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1600197979430" />
-    <state width="1693" height="118" key="XDebugger.FullValuePopup" timestamp="1600470018051">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1205" height="83" key="XDebugger.FullValuePopup" timestamp="1600816636029">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="1205" height="83" key="XDebugger.FullValuePopup/0.0.1366.728@0.0.1366.728" timestamp="1600816636029" />
     <state width="1693" height="118" key="XDebugger.FullValuePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1600470018051" />
     <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1600463549152">
       <screen x="0" y="0" width="1920" height="1040" />
