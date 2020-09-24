@@ -172,7 +172,7 @@ for i in range(0, 24):
 
 coord.append(coord[0]) #repeat the first point to create a 'closed loop'
 xs, ys = zip(*coord) #create lists of x and y values
-x = "C:/Users/malga/OneDrive/Documentos/GitHub/Problema-del-Viajante/z1.png"
+x = "mapa_arg.png"
 img = mpimg.imread(x)
 imgplot = plt.imshow(img)
 imgplot.axes.get_xaxis().set_visible(False)
