@@ -14,7 +14,7 @@ nombres_ciudades = [0] * cant_ciudades
 array_fitness = [0] * tam_poblacion
 porc_elitismo = 0.1
 tam_elitismo = int(tam_poblacion * porc_elitismo)
-tam_elitismo = tam_elitismo if tam_elitismo % 2 == 0 else tam_elitismo + 1
+tam_elitismo = tam_elitismo if tam_elitismo % 2 == 0 else tam_elitismo - 1
 
 df_tabla_coordenadas = pd.read_excel('TablaCoordenadas.xlsx', header=None)
 coordenadas1 = df_tabla_coordenadas.to_numpy()
@@ -74,6 +74,7 @@ def ciclico(padre1, padre2):
             for j in range(cant_ciudades):
                 if hijo[j] is None:
                     hijo[j] = padre2[j]
+
     return hijo
 
 
@@ -95,6 +96,7 @@ def calcula_distancia_recorrido(cromosoma):  # Devuelve el fitness de un solo cr
 
     # Suma tambien la distancia de la ultima ciudad hasta la ciudad de partida
     dist_recorrido += distancias[cromosoma[cant_ciudades - 1], cromosoma[0]]
+
     return dist_recorrido
 
 
@@ -172,9 +174,9 @@ imgplot = plt.imshow(img)
 imgplot.axes.get_xaxis().set_visible(False)
 plt.axis('off')
 plt.plot(xs, ys, color="black")
-plt.suptitle("Gráfica del mejor recorrido")
+plt.suptitle("Gráfica de el mejor recorrido")
 distancia = calcula_distancia_recorrido(cromosoma_mvp)
-plt.title("se recorrieron " + str(distancia) + " kilometros", fontsize=10)
+plt.title("se recorrieron "+ str(distancia)+" kilometros", fontsize=10)
 plt.show()
 recorrido_viajante = [0] * cant_ciudades
 for k in range(cant_ciudades):
