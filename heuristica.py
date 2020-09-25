@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 cant_ciudades = 24
 nombres_ciudades = [0] * cant_ciudades
@@ -8,6 +10,9 @@ df_ciudades_distancias = pd.read_excel('TablaCiudades.xlsx')
 nombres_ciudades = list(df_ciudades_distancias)
 distancias = df_ciudades_distancias.tail(cant_ciudades).to_numpy()
 ciudades_posibles = list(range(cant_ciudades))
+
+df_tabla_coordenadas = pd.read_excel('TablaCoordenadas.xlsx',header=None)
+coordenadas1 = df_tabla_coordenadas.to_numpy()
 
 
 def calcula_distancia_recorrido(cromosoma):  # Devuelve el fitness de un solo cromosoma
@@ -23,21 +28,57 @@ def calcula_distancia_recorrido(cromosoma):  # Devuelve el fitness de un solo cr
 def menu():
     for i in range(cant_ciudades):
         print(i, '. ', nombres_ciudades[i])
-    ciudad_cercana = int(input("Ingrese la ciudad desde la que quiere empezar: "))
+    mejor_recorrido[0] = int(input("Ingrese la ciudad desde la que quiere empezar: "))
 
-    # while ciudades_posibles is not None:
-    ciudad_cercana = calc_ciudad_cercana(ciudad_cercana)
-    print(ciudad_cercana)
+    for i in range(1, 24):
+        aux = mejor_recorrido[i-1]
+        mejor_recorrido.append(calc_ciudad_cercana_2(aux))
 
 
-def calc_ciudad_cercana(ciudad):
-    global ciudades_posibles
+def valida_repeticion(ciudad):
+    flag = False
+    if ciudad in mejor_recorrido:
+        flag = True
+    return flag
+
+
+def calc_ciudad_cercana_2(ciudad):
     distancias_ciudad = distancias[ciudad]
-    dist_sin_cero = distancias_ciudad[distancias_ciudad != 0]
+    cont = 1
+    flag = True
     distancia_minima = np.argsort(distancias_ciudad)
-    ciudad_cercana = distancia_minima[1]
-    # ciudades_posibles = np.delete(ciudades_posibles, ciudad, 0)
+    while flag:
+        ciudad_cercana = distancia_minima[cont]
+        valida = valida_repeticion(ciudad_cercana)
+        if valida:
+            cont += 1
+        else:
+            flag = False
     return ciudad_cercana
 
+def mapita():
+    coord = [0] * 24
+    skere = mejor_recorrido
+    for i in range(0, 24):
+        coordenadas = [0] * 2
+        coordenadas[0] = coordenadas1[skere[i]][0]
+        coordenadas[1] = coordenadas1[skere[i]][1]
+        coord[i] = coordenadas
 
+    coord.append(coord[0])  # repeat the first point to create a 'closed loop'
+    xs, ys = zip(*coord)  # create lists of x and y values
+    x = "mapa_arg.png"
+    img = mpimg.imread(x)
+    imgplot = plt.imshow(img)
+    imgplot.axes.get_xaxis().set_visible(False)
+    plt.axis('off')
+    plt.plot(xs, ys, color="black")
+    plt.suptitle("Gráfica del mejor recorrido partiendo de "+ nombres_ciudades[mejor_recorrido[0]])
+    distancia = calcula_distancia_recorrido(skere)
+    plt.title("se recorrieron " + str(distancia) + " kilometros", fontsize=10)
+    plt.show()
+
+mejor_recorrido = [0]
 menu()
+print(mejor_recorrido)
+mapita()
