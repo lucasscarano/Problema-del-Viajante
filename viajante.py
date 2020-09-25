@@ -17,7 +17,7 @@ porc_elitismo = 0.1
 tam_elitismo = int(tam_poblacion * porc_elitismo)
 tam_elitismo = tam_elitismo if tam_elitismo % 2 == 0 else tam_elitismo + 1
 
-df_tabla_coordenadas = pd.read_excel('TablaCoordenadas.xlsx',header=None)
+df_tabla_coordenadas = pd.read_excel('TablaCoordenadas.xlsx', header=None)
 coordenadas1 = df_tabla_coordenadas.to_numpy()
 
 # Se guarda el Excel en un DataFrame de Pandas
@@ -28,6 +28,7 @@ nombres_ciudades = list(df_ciudades_distancias)
 
 # Extrae solo las distancias entre las ciudades en un arreglo Numpy 2D
 distancias = df_ciudades_distancias.tail(cant_ciudades).to_numpy()
+
 
 def poblacion_inicial():
     for i in range(0, tam_poblacion):
@@ -86,10 +87,10 @@ def crossover():
             padre1 = aux_poblacion[i]
             padre2 = aux_poblacion[i + 1]
             aux_poblacion[i] = ciclico(padre1, padre2)
-            aux_poblacion[i + 1] = ciclico(padre2, padre1)
+            aux_poblacion[i+1] = ciclico(padre2, padre1)
 
 
-def calcula_distancia_recorrido(cromosoma):  # Devuelve el fitness de un solo cromosoma
+def calcula_distancia_recorrido(cromosoma):  # Devuelve la distancia de un solo cromosoma
     dist_recorrido = 0
     for i in range(0, cant_ciudades - 1):
         dist_recorrido += distancias[cromosoma[i], cromosoma[i + 1]]
@@ -104,7 +105,7 @@ def calcula_fitness_poblacion():
     array_distancias = [0] * tam_poblacion
     for i in range(0, tam_poblacion):
         array_distancias[i] = calcula_distancia_recorrido(array_poblacion[i])
-    distancia_total= np.sum(array_distancias)
+    distancia_total = np.sum(array_distancias)
     for i in range(0, tam_poblacion):
         array_fitness[i] = distancia_total - array_distancias[i]
     sumatoria_complementos = np.sum(array_fitness)
@@ -112,73 +113,73 @@ def calcula_fitness_poblacion():
         array_fitness[i] = (array_fitness[i] / sumatoria_complementos)
 
 
-#Devuelve los mejores cromosomas (la cantidad igual al 10% del tam_poblacion)
+# Devuelve los mejores cromosomas (la cantidad igual a tam_elitismo)
 def elite():
     global aux_poblacion
     array_elitismo = [0] * tam_elitismo
+    # Devuelve los indices de los mejores cromosomas, considerando el fitness, de mayor a menor
     indices_elitismo = np.argsort(array_fitness)[::-1][:tam_elitismo]
-    #Devuelve los indices de los mejores cromosomas, considerando el fitness, de mayor a menor
     for i in range(0, tam_elitismo):
         array_elitismo[i] = array_poblacion[indices_elitismo[i]]
 
     aux_poblacion = np.delete(array_poblacion, indices_elitismo, 0).tolist()
     return array_elitismo
 
+
 def mutacion():
     muta_corridas = len(array_poblacion)
     for i in range(0, muta_corridas):
         muta = random.random()
         if muta < chances_mutacion:
-            pos1 = random.randint(0,cant_ciudades-1)
-            pos2 = random.randint(0,cant_ciudades-1)
+            pos1 = random.randint(0, cant_ciudades-1)
+            pos2 = random.randint(0, cant_ciudades-1)
+            # Si se las posiciones de mutacion son iguales se calcula una nueva pos2 hasta que sean distintas
             while pos2 == pos1:
-                pos2 = random.randint(0,cant_ciudades-1)
-            cromosoma = array_poblacion[i]
+                pos2 = random.randint(0, cant_ciudades-1)
+
             array_poblacion[pos1], array_poblacion[pos2] = array_poblacion[pos2], array_poblacion[pos1]
 
 
-#main
+# Main
 resp = input('Quiere hacer elitismo (s/n): ')
 if resp == 's' or resp == 'S':
     array_elite = elite()
 
 poblacion_inicial()
+
 for i in range(0, corridas):
     calcula_fitness_poblacion()
     array_poblacion = ruleta()
     aux_poblacion = array_poblacion
     crossover()
     mutacion()
-    #Ingresa los cromosomas elitistas a la poblacion resultante del crossover
-    if resp == 'S' or resp == 's':
-        for l in range(0, len(array_elite)):
-            aux_poblacion.append(array_elite[l])
+    # Ingresa los cromosomas elitistas a la poblacion resultante del crossover
+    if resp == 's' or resp == 'S':
+        for j in range(0, len(array_elite)):
+            aux_poblacion.append(array_elite[j])
         array_poblacion = aux_poblacion
 
 
-
-
-
-
-coord = [0]*24
+coord = [0]*cant_ciudades
 indice_mvp = np.argmax(array_fitness)
-skere = array_poblacion[indice_mvp]
-for i in range(0, 24):
-    coordenadas = [0]*2
-    coordenadas[0] = coordenadas1[skere[i]][0]
-    coordenadas[1] = coordenadas1[skere[i]][1]
+recorrido_mvp = array_poblacion[indice_mvp]
+
+for i in range(0, cant_ciudades):
+    coordenadas = [0] * 2
+    coordenadas[0] = coordenadas1[recorrido_mvp[i]][0]
+    coordenadas[1] = coordenadas1[recorrido_mvp[i]][1]
     coord[i] = coordenadas
 
 
-coord.append(coord[0]) #repeat the first point to create a 'closed loop'
-xs, ys = zip(*coord) #create lists of x and y values
+coord.append(coord[0])  # Agrega el primer punto al final para cerrar la ruta
+xs, ys = zip(*coord)  # Crea una lista de los valores x,y
 x = "mapa_arg.png"
 img = mpimg.imread(x)
 imgplot = plt.imshow(img)
 imgplot.axes.get_xaxis().set_visible(False)
 plt.axis('off')
-plt.plot(xs,ys, color="black")
+plt.plot(xs, ys, color="black")
 plt.suptitle("Gráfica de el mejor recorrido")
-distancia = calcula_distancia_recorrido(skere)
-plt.title("se recorrieron "+ str(distancia)+" kilometros", fontsize=10)
+distancia = calcula_distancia_recorrido(recorrido_mvp)
+plt.title("Se recorrieron " + str(distancia) + " kilómetros", fontsize=10)
 plt.show()

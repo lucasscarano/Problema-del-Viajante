@@ -4,14 +4,13 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 cant_ciudades = 24
-nombres_ciudades = [0] * cant_ciudades
 
 df_ciudades_distancias = pd.read_excel('TablaCiudades.xlsx')
 nombres_ciudades = list(df_ciudades_distancias)
 distancias = df_ciudades_distancias.tail(cant_ciudades).to_numpy()
 ciudades_posibles = list(range(cant_ciudades))
 
-df_tabla_coordenadas = pd.read_excel('TablaCoordenadas.xlsx',header=None)
+df_tabla_coordenadas = pd.read_excel('TablaCoordenadas.xlsx', header=None)
 coordenadas1 = df_tabla_coordenadas.to_numpy()
 
 
@@ -32,7 +31,7 @@ def menu():
 
     for i in range(1, 24):
         aux = mejor_recorrido[i-1]
-        mejor_recorrido.append(calc_ciudad_cercana_2(aux))
+        mejor_recorrido.append(calc_ciudad_mas_cercana(aux))
 
 
 def valida_repeticion(ciudad):
@@ -42,21 +41,22 @@ def valida_repeticion(ciudad):
     return flag
 
 
-def calc_ciudad_cercana_2(ciudad):
+def calc_ciudad_mas_cercana(ciudad):
     distancias_ciudad = distancias[ciudad]
     cont = 1
     flag = True
     distancia_minima = np.argsort(distancias_ciudad)
     while flag:
-        ciudad_cercana = distancia_minima[cont]
-        valida = valida_repeticion(ciudad_cercana)
+        ciudad_mas_cercana = distancia_minima[cont]
+        valida = valida_repeticion(ciudad_mas_cercana)
         if valida:
             cont += 1
         else:
             flag = False
-    return ciudad_cercana
+    return ciudad_mas_cercana
 
-def mapita():
+
+def mostrar_mapa():
     coord = [0] * 24
     skere = mejor_recorrido
     for i in range(0, 24):
@@ -73,12 +73,13 @@ def mapita():
     imgplot.axes.get_xaxis().set_visible(False)
     plt.axis('off')
     plt.plot(xs, ys, color="black")
-    plt.suptitle("Gráfica del mejor recorrido partiendo de "+ nombres_ciudades[mejor_recorrido[0]])
+    plt.suptitle("Gráfica del mejor recorrido partiendo de " + nombres_ciudades[mejor_recorrido[0]])
     distancia = calcula_distancia_recorrido(skere)
-    plt.title("se recorrieron " + str(distancia) + " kilometros", fontsize=10)
+    plt.title("Se recorrieron " + str(distancia) + " kilómetros", fontsize=10)
     plt.show()
+
 
 mejor_recorrido = [0]
 menu()
 print(mejor_recorrido)
-mapita()
+mostrar_mapa()
