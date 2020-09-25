@@ -58,11 +58,11 @@ def calc_ciudad_mas_cercana(ciudad):
 
 def mostrar_mapa():
     coord = [0] * 24
-    skere = mejor_recorrido
+
     for i in range(0, 24):
         coordenadas = [0] * 2
-        coordenadas[0] = coordenadas1[skere[i]][0]
-        coordenadas[1] = coordenadas1[skere[i]][1]
+        coordenadas[0] = coordenadas1[mejor_recorrido[i]][0]
+        coordenadas[1] = coordenadas1[mejor_recorrido[i]][1]
         coord[i] = coordenadas
 
     coord.append(coord[0])  # repeat the first point to create a 'closed loop'
@@ -74,7 +74,7 @@ def mostrar_mapa():
     plt.axis('off')
     plt.plot(xs, ys, color="black")
     plt.suptitle("Gráfica del mejor recorrido partiendo de " + nombres_ciudades[mejor_recorrido[0]])
-    distancia = calcula_distancia_recorrido(skere)
+    distancia = calcula_distancia_recorrido(mejor_recorrido)
     plt.title("Se recorrieron " + str(distancia) + " kilómetros", fontsize=10)
     plt.show()
 
