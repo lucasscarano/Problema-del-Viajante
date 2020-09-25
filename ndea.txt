@@ -1,8 +1,0 @@
-"""def calc_ciudad_cercana(ciudad):
-    global ciudades_posibles
-    distancias_ciudad = distancias[ciudad]
-    dist_sin_cero = distancias_ciudad[distancias_ciudad != 0]
-    distancia_minima = np.argsort(distancias_ciudad)
-    ciudad_cercana = distancia_minima[1]
-    # ciudades_posibles = np.delete(ciudades_posibles, ciudad, 0)
-    return ciudad_cercana"""
