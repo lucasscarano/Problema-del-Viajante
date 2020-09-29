@@ -4,11 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-corridas = 500
+corridas = 200
 tam_poblacion = 50
 cant_ciudades = 24
 chances_crossover = 0.75
-chances_mutacion = 0.05
+chances_mutacion = 0.10
 nombres_ciudades = [0] * cant_ciudades
 array_fitness = [0] * tam_poblacion
 array_poblacion = [0] * tam_poblacion
@@ -170,6 +170,7 @@ for i in range(0, cant_ciudades):
     coordenadas[1] = coordenadas1[recorrido_mvp[i]][1]
     coord[i] = coordenadas
 
+print(recorrido_mvp)
 
 coord.append(coord[0])  # Agrega el primer punto al final para cerrar la ruta
 xs, ys = zip(*coord)  # Crea una lista de los valores x,y
@@ -179,7 +180,7 @@ imgplot = plt.imshow(img)
 imgplot.axes.get_xaxis().set_visible(False)
 plt.axis('off')
 plt.plot(xs, ys, color="black")
-plt.suptitle("Gráfica de el mejor recorrido")
+plt.suptitle("Gráfica del mejor recorrido")
 distancia = calcula_distancia_recorrido(recorrido_mvp)
 plt.title("Se recorrieron " + str(distancia) + " kilómetros", fontsize=10)
 plt.show()
