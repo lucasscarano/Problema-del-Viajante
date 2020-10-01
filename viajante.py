@@ -17,10 +17,7 @@ porc_elitismo = 0.1
 tam_elitismo = int(tam_poblacion * porc_elitismo)
 tam_elitismo = tam_elitismo if tam_elitismo % 2 == 0 else tam_elitismo + 1
 
-df_tabla_coordenadas = pd.read_excel('TablaCoordenadas.xlsx', header=None)
-coordenadas1 = df_tabla_coordenadas.to_numpy()
-
-# Se guarda el Excel en un DataFrame de Pandas
+# Se guarda el Excel de las distancias en un DataFrame de Pandas
 df_ciudades_distancias = pd.read_excel('TablaCiudades.xlsx')
 
 # Extrae la cabecera de la tabla con los nombres de las ciudades en una lista
@@ -28,6 +25,10 @@ nombres_ciudades = list(df_ciudades_distancias)
 
 # Extrae solo las distancias entre las ciudades en un arreglo Numpy 2D
 distancias = df_ciudades_distancias.tail(cant_ciudades).to_numpy()
+
+# Se guardan las coordenadas de cada ciudad en el mapa en una lista 2D
+df_tabla_coordenadas = pd.read_excel('TablaCoordenadas.xlsx', header=None)
+lista_coordenadas = df_tabla_coordenadas.values.tolist()
 
 
 def poblacion_inicial():
@@ -160,22 +161,20 @@ for i in range(0, corridas):
         array_poblacion = aux_poblacion
 
 
-coord = [0]*cant_ciudades
+coordenadas_mvp = [0] * cant_ciudades
 indice_mvp = np.argmax(array_fitness)
 recorrido_mvp = array_poblacion[indice_mvp]
 
+# Guarda las coordenadas del mejor recorrido en orden para mostrar en el mapa
 for i in range(0, cant_ciudades):
-    coordenadas = [0] * 2
-    coordenadas[0] = coordenadas1[recorrido_mvp[i]][0]
-    coordenadas[1] = coordenadas1[recorrido_mvp[i]][1]
-    coord[i] = coordenadas
+    coordenadas_mvp[i] = lista_coordenadas[recorrido_mvp[i]]
 
 print(recorrido_mvp)
 
-coord.append(coord[0])  # Agrega el primer punto al final para cerrar la ruta
-xs, ys = zip(*coord)  # Crea una lista de los valores x,y
-x = "mapa_arg.png"
-img = mpimg.imread(x)
+coordenadas_mvp.append(coordenadas_mvp[0])  # Agrega el primer punto al final para cerrar la ruta
+xs, ys = zip(*coordenadas_mvp)  # Crea una lista de los valores mapa,y
+mapa = "mapa_arg.png"
+img = mpimg.imread(mapa)
 imgplot = plt.imshow(img)
 imgplot.axes.get_xaxis().set_visible(False)
 plt.axis('off')

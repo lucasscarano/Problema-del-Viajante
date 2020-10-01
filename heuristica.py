@@ -11,7 +11,7 @@ distancias = df_ciudades_distancias.tail(cant_ciudades).to_numpy()
 ciudades_posibles = list(range(cant_ciudades))
 
 df_tabla_coordenadas = pd.read_excel('TablaCoordenadas.xlsx', header=None)
-coordenadas1 = df_tabla_coordenadas.to_numpy()
+lista_coordenadas = df_tabla_coordenadas.values.tolist()
 
 
 def calcula_distancia_recorrido(cromosoma):  # Devuelve el fitness de un solo cromosoma
@@ -27,16 +27,16 @@ def calcula_distancia_recorrido(cromosoma):  # Devuelve el fitness de un solo cr
 def menu():
     for i in range(cant_ciudades):
         print(i, '. ', nombres_ciudades[i])
-    mejor_recorrido[0] = int(input("Ingrese la ciudad desde la que quiere empezar: "))
+    recorrido_mvp[0] = int(input("Ingrese la ciudad desde la que quiere empezar: "))
 
     for i in range(1, 24):
-        aux = mejor_recorrido[i-1]
-        mejor_recorrido.append(calc_ciudad_mas_cercana(aux))
+        aux = recorrido_mvp[i - 1]
+        recorrido_mvp.append(calc_ciudad_mas_cercana(aux))
 
 
 def valida_repeticion(ciudad):
     flag = False
-    if ciudad in mejor_recorrido:
+    if ciudad in recorrido_mvp:
         flag = True
     return flag
 
@@ -57,29 +57,27 @@ def calc_ciudad_mas_cercana(ciudad):
 
 
 def mostrar_mapa():
-    coord = [0] * 24
+    coordenadas_mvp = [0] * 24
 
-    for i in range(0, 24):
-        coordenadas = [0] * 2
-        coordenadas[0] = coordenadas1[mejor_recorrido[i]][0]
-        coordenadas[1] = coordenadas1[mejor_recorrido[i]][1]
-        coord[i] = coordenadas
+    # Guarda las coordenadas del mejor recorrido en orden para mostrar en el mapa
+    for i in range(0, cant_ciudades):
+        coordenadas_mvp[i] = lista_coordenadas[recorrido_mvp[i]]
 
-    coord.append(coord[0])  # repeat the first point to create a 'closed loop'
-    xs, ys = zip(*coord)  # create lists of x and y values
-    x = "mapa_arg.png"
-    img = mpimg.imread(x)
+    coordenadas_mvp.append(coordenadas_mvp[0])  # Agrega el primer punto al final para cerrar la ruta
+    xs, ys = zip(*coordenadas_mvp)  # Crea una lista de los valores mapa,y
+    mapa = "mapa_arg.png"
+    img = mpimg.imread(mapa)
     imgplot = plt.imshow(img)
     imgplot.axes.get_xaxis().set_visible(False)
     plt.axis('off')
     plt.plot(xs, ys, color="black")
-    plt.suptitle("Gráfica del mejor recorrido partiendo de " + nombres_ciudades[mejor_recorrido[0]])
-    distancia = calcula_distancia_recorrido(mejor_recorrido)
+    plt.suptitle("Gráfica del mejor recorrido partiendo de " + nombres_ciudades[recorrido_mvp[0]])
+    distancia = calcula_distancia_recorrido(recorrido_mvp)
     plt.title("Se recorrieron " + str(distancia) + " kilómetros", fontsize=10)
     plt.show()
 
 
-mejor_recorrido = [0]
+recorrido_mvp = [0]
 menu()
-print(mejor_recorrido)
+print(recorrido_mvp)
 mostrar_mapa()
