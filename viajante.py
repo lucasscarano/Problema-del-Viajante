@@ -8,7 +8,7 @@ corridas = 300
 tam_poblacion = 50
 cant_ciudades = 24
 chances_crossover = 0.90
-chances_mutacion = 0.20
+chances_mutacion = 0.90
 recorrido_mvp = [0] * cant_ciudades
 array_poblacion = [0] * tam_poblacion
 nombres_ciudades = [0] * cant_ciudades
@@ -178,6 +178,7 @@ for cor in range(corridas):
     if resp == 's' or resp == 'S':
         for eli in range(len(array_elite)):
             array_poblacion.append(array_elite[eli])
+    array_poblacion = np.random.permutation(array_poblacion).tolist()
     asigna_mvp()
 mostrar_mapa()
 
