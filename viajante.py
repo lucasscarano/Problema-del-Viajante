@@ -8,7 +8,7 @@ corridas = 300
 tam_poblacion = 50
 cant_ciudades = 24
 chances_crossover = 0.90
-chances_mutacion = 0.20
+chances_mutacion = 0.90
 mvp = [0] * cant_ciudades
 array_poblacion = [0] * tam_poblacion
 nombres_ciudades = [0] * cant_ciudades
@@ -38,26 +38,16 @@ def poblacion_inicial():
 
 
 def ruleta():
-    base = 0
-    cant_casilleros = 0
-
-    for i in range(tam_poblacion):
-        casilleros = round(array_fitness[i] * 1000)
-        cant_casilleros = cant_casilleros + casilleros
-    roulette = [0] * cant_casilleros
-
-    for i in range(tam_poblacion):
-        casilleros = round(array_fitness[i] * 1000)
-
-        for j in range(base, base + casilleros):
-            roulette[j] = i
-        base = base + casilleros
-
     nueva_poblacion = [0] * tam_poblacion
-    for i in range(tam_poblacion):
-        bolilla = random.randint(0, cant_casilleros - 1)
-        nueva_poblacion[i] = array_poblacion[roulette[bolilla]]
-
+    for j in range(tam_poblacion):
+        suma = 0
+        cont_stop = random.random()
+        for i in range(tam_poblacion):
+            suma += array_fitness[i]
+            if suma >= cont_stop:
+                indice_stop = i
+                break
+        nueva_poblacion[j] = array_poblacion[indice_stop]
     return nueva_poblacion
 
 
@@ -79,8 +69,7 @@ def ciclico(padre1, padre2):
     return hijo
 
 
-def crossover():
-    cros_corridas = len(array_poblacion)
+def crossover(cros_corridas):
     for i in range(0, cros_corridas, 2):
         cros = random.random()
         if cros < chances_crossover:
@@ -113,19 +102,16 @@ def calcula_fitness_poblacion():
 
 
 # Devuelve los mejores cromosomas (la cantidad igual al 10% del tam_poblacion)
-def elite():
+def elite(cont):
     global array_poblacion
-    array_elitismo = [0] * tam_elitismo
     indices_elitismo = np.argsort(array_fitness)[::-1][:tam_elitismo]
     # Devuelve los indices de los mejores cromosomas, considerando el fitness, de mayor a menor
-    for i in range(tam_elitismo):
-        array_elitismo[i] = array_poblacion[indices_elitismo[i]]
-    array_poblacion = np.delete(array_poblacion, indices_elitismo, 0).tolist()
-    return array_elitismo
+    for i in range(0, tam_elitismo):
+        array_poblacion[indices_elitismo[i]], array_poblacion[cont] = array_poblacion[cont], array_poblacion[indices_elitismo[i]]
+        cont += 1
 
 
-def mutacion():
-    muta_corridas = len(array_poblacion)
+def mutacion(muta_corridas):
     for i in range(muta_corridas):
         muta = random.random()
         if muta < chances_mutacion:
@@ -144,8 +130,8 @@ def asigna_mvp():
 
 
 # Main
-resp = input('Quiere hacer elitismo (s/n): ')
-
+#resp = input('Quiere hacer elitismo (s/n): ')
+resp = 'n'
 poblacion_inicial()
 calcula_fitness_poblacion()
 mvp = array_poblacion[0]
@@ -153,16 +139,15 @@ for cor in range(corridas):
     array_poblacion = ruleta()
     calcula_fitness_poblacion()
     if resp == 's' or resp == 'S':
-        array_elite = elite()
-    crossover()
-    mutacion()
-    if resp == 's' or resp == 'S':
-        for eli in range(len(array_elite)):
-            array_poblacion.append(array_elite[eli])
+        n = tam_poblacion - tam_elitismo
+        elite(n)
+    else:
+        n = tam_poblacion
+    crossover(n)
+    mutacion(n)
     asigna_mvp()
 
-
-coord = [0] * cant_ciudades
+coordenadas_mvp = [0] * cant_ciudades
 distancia_mvp = calcula_distancia_recorrido(mvp)
 recorrido_viajante = [0] * cant_ciudades
 for k in range(cant_ciudades):
@@ -174,9 +159,9 @@ print(mvp)
 
 for ciudades in range(cant_ciudades):
     coordenadas = [0] * 2
-    coordenadas[0] = coordenadas1[mvp[ciudades]][0]
-    coordenadas[1] = coordenadas1[mvp[ciudades]][1]
-    coord[ciudades] = coordenadas
+    coordenadas[0] = lista_coordenadas[mvp[ciudades]][0]
+    coordenadas[1] = lista_coordenadas[mvp[ciudades]][1]
+    coordenadas_mvp[ciudades] = coordenadas
 
 coordenadas_mvp.append(coordenadas_mvp[0])  # Agrega el primer punto al final para cerrar la ruta
 xs, ys = zip(*coordenadas_mvp)  # Crea una lista de los valores mapa,y
@@ -190,5 +175,3 @@ plt.suptitle("Gráfica del mejor recorrido")
 distancia = calcula_distancia_recorrido(mvp)
 plt.title("se recorrieron " + str(distancia) + " kilometros", fontsize=10)
 plt.show()
-
-
