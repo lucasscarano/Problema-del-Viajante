@@ -53,7 +53,7 @@ def ruleta():
 
 def ciclico(padre1, padre2):
     hijo = [None] * cant_ciudades
-    j = random.randint(0, cant_ciudades - 1)
+    j = 0
     hijo[j] = padre1[j]
     flag = True
     while flag:
@@ -131,7 +131,7 @@ def asigna_mvp():
 
 # Main
 #resp = input('Quiere hacer elitismo (s/n): ')
-resp = 'n'
+resp = 's'
 poblacion_inicial()
 calcula_fitness_poblacion()
 mvp = array_poblacion[0]
@@ -157,11 +157,9 @@ print(distancia_mvp)
 print(recorrido_viajante)
 print(mvp)
 
-for ciudades in range(cant_ciudades):
-    coordenadas = [0] * 2
-    coordenadas[0] = lista_coordenadas[mvp[ciudades]][0]
-    coordenadas[1] = lista_coordenadas[mvp[ciudades]][1]
-    coordenadas_mvp[ciudades] = coordenadas
+# Guarda las coordenadas del mejor recorrido en orden para mostrar en el mapa
+for i in range(cant_ciudades):
+    coordenadas_mvp[i] = lista_coordenadas[mvp[i]]
 
 coordenadas_mvp.append(coordenadas_mvp[0])  # Agrega el primer punto al final para cerrar la ruta
 xs, ys = zip(*coordenadas_mvp)  # Crea una lista de los valores mapa,y
