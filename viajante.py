@@ -9,7 +9,7 @@ tam_poblacion = 50
 cant_ciudades = 24
 chances_crossover = 0.90
 chances_mutacion = 0.20
-mvp = [0] * cant_ciudades
+recorrido_mvp = [0] * cant_ciudades
 array_poblacion = [0] * tam_poblacion
 nombres_ciudades = [0] * cant_ciudades
 array_fitness = [0] * tam_poblacion
@@ -38,26 +38,16 @@ def poblacion_inicial():
 
 
 def ruleta():
-    base = 0
-    cant_casilleros = 0
-
-    for i in range(tam_poblacion):
-        casilleros = round(array_fitness[i] * 1000)
-        cant_casilleros = cant_casilleros + casilleros
-    roulette = [0] * cant_casilleros
-
-    for i in range(tam_poblacion):
-        casilleros = round(array_fitness[i] * 1000)
-
-        for j in range(base, base + casilleros):
-            roulette[j] = i
-        base = base + casilleros
-
     nueva_poblacion = [0] * tam_poblacion
-    for i in range(tam_poblacion):
-        bolilla = random.randint(0, cant_casilleros - 1)
-        nueva_poblacion[i] = array_poblacion[roulette[bolilla]]
-
+    for j in range(tam_poblacion):
+        suma = 0
+        cont_stop = random.random()
+        for i in range(tam_poblacion):
+            suma += array_fitness[i]
+            if suma >= cont_stop:
+                indice_stop = i
+                break
+        nueva_poblacion[j] = array_poblacion[indice_stop]
     return nueva_poblacion
 
 
@@ -137,10 +127,39 @@ def mutacion():
 
 
 def asigna_mvp():
-    global mvp
+    global recorrido_mvp
     for i in range(tam_poblacion):
-        if calcula_distancia_recorrido(mvp) > calcula_distancia_recorrido(array_poblacion[i]):
-            mvp = array_poblacion[i]
+        if calcula_distancia_recorrido(recorrido_mvp) > calcula_distancia_recorrido(array_poblacion[i]):
+            recorrido_mvp = array_poblacion[i]
+
+
+def mostrar_mapa():
+    coordenadas_mvp = [0] * cant_ciudades
+    distancia_mvp = calcula_distancia_recorrido(recorrido_mvp)
+    recorrido_viajante = [0] * cant_ciudades
+    for k in range(cant_ciudades):
+        recorrido_viajante[k] = nombres_ciudades[recorrido_mvp[k]]
+
+    print(distancia_mvp)
+    print(recorrido_viajante)
+    print(recorrido_mvp)
+
+    # Guarda las coordenadas del mejor recorrido en orden para mostrar en el mapa
+    for i in range(cant_ciudades):
+        coordenadas_mvp[i] = lista_coordenadas[recorrido_mvp[i]]
+
+    coordenadas_mvp.append(coordenadas_mvp[0])  # Agrega el primer punto al final para cerrar la ruta
+    xs, ys = zip(*coordenadas_mvp)  # Crea una lista de los valores mapa,y
+    mapa = "mapa_arg.png"
+    img = mpimg.imread(mapa)
+    imgplot = plt.imshow(img)
+    imgplot.axes.get_xaxis().set_visible(False)
+    plt.axis('off')
+    plt.plot(xs, ys, color="black")
+    plt.suptitle("Gráfica del mejor recorrido")
+    distancia = calcula_distancia_recorrido(recorrido_mvp)
+    plt.title("se recorrieron " + str(distancia) + " kilometros", fontsize=10)
+    plt.show()
 
 
 # Main
@@ -148,7 +167,7 @@ resp = input('Quiere hacer elitismo (s/n): ')
 
 poblacion_inicial()
 calcula_fitness_poblacion()
-mvp = array_poblacion[0]
+recorrido_mvp = array_poblacion[0]
 for cor in range(corridas):
     array_poblacion = ruleta()
     calcula_fitness_poblacion()
@@ -160,35 +179,5 @@ for cor in range(corridas):
         for eli in range(len(array_elite)):
             array_poblacion.append(array_elite[eli])
     asigna_mvp()
-
-
-coord = [0] * cant_ciudades
-distancia_mvp = calcula_distancia_recorrido(mvp)
-recorrido_viajante = [0] * cant_ciudades
-for k in range(cant_ciudades):
-    recorrido_viajante[k] = nombres_ciudades[mvp[k]]
-
-print(distancia_mvp)
-print(recorrido_viajante)
-print(mvp)
-
-for ciudades in range(cant_ciudades):
-    coordenadas = [0] * 2
-    coordenadas[0] = coordenadas1[mvp[ciudades]][0]
-    coordenadas[1] = coordenadas1[mvp[ciudades]][1]
-    coord[ciudades] = coordenadas
-
-coordenadas_mvp.append(coordenadas_mvp[0])  # Agrega el primer punto al final para cerrar la ruta
-xs, ys = zip(*coordenadas_mvp)  # Crea una lista de los valores mapa,y
-mapa = "mapa_arg.png"
-img = mpimg.imread(mapa)
-imgplot = plt.imshow(img)
-imgplot.axes.get_xaxis().set_visible(False)
-plt.axis('off')
-plt.plot(xs, ys, color="black")
-plt.suptitle("Gráfica del mejor recorrido")
-distancia = calcula_distancia_recorrido(mvp)
-plt.title("se recorrieron " + str(distancia) + " kilometros", fontsize=10)
-plt.show()
-
+mostrar_mapa()
 
