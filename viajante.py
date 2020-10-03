@@ -9,12 +9,12 @@ corridas = 500
 tam_poblacion = 50
 cant_ciudades = 24
 chances_crossover = 0.75
-chances_mutacion = 0.10
+chances_mutacion = 0.05
 recorrido_mvp = [0] * cant_ciudades
 
-array_minimos = [0]*corridas
-array_maximos = [0]*corridas
-array_promedios = [0]*corridas
+array_minimos = [0] * corridas
+array_maximos = [0] * corridas
+array_promedios = [0] * corridas
 
 array_poblacion = [0] * tam_poblacion
 nombres_ciudades = [0] * cant_ciudades
@@ -43,29 +43,15 @@ def poblacion_inicial():
         array_poblacion[i] = cromosoma
 
 
-""" def ruleta_nueva():
-    nueva_poblacion = [0] * tam_poblacion
-    for j in range(tam_poblacion):
-        suma = 0
-        cont_stop = random.random()
-        for i in range(tam_poblacion):
-            suma += array_fitness[i]
-            if suma >= cont_stop:
-                indice_stop = i
-                break
-        nueva_poblacion[j] = array_poblacion[indice_stop]
-    return nueva_poblacion """
-
-def ruleta_vieja():
-
+def ruleta():
     global array_poblacion
-    aux_poblacion=array_poblacion
+    aux_poblacion = array_poblacion
     base = 0
     cant_casilleros = 0
     tam_nueva_poblacion = len(array_poblacion)
     if tam_nueva_poblacion < tam_poblacion:
-        for eli in range(len(array_elite)):
-            array_poblacion.append(array_elite[eli])
+        for elitistas in range(len(array_elite)):
+            array_poblacion.append(array_elite[elitistas])
 
     for i in range(tam_poblacion):
         casilleros = round(array_fitness[i] * 1000)
@@ -169,11 +155,12 @@ def asigna_mvp():
         if calcula_distancia_recorrido(recorrido_mvp) > calcula_distancia_recorrido(array_poblacion[i]):
             recorrido_mvp = array_poblacion[i]
 
+
 def mayor_menor_promedio():
     global mayor
     global menor
     global promedio
-    
+
     for i in range(tam_poblacion):
         distancia = calcula_distancia_recorrido(array_poblacion[i])
         promedio += distancia
@@ -182,8 +169,7 @@ def mayor_menor_promedio():
 
         if distancia < menor:
             menor = distancia
-     
-        
+
 
 def mostrar_mapa():
     coordenadas_mvp = [0] * cant_ciudades
@@ -214,16 +200,25 @@ def mostrar_mapa():
     plt.show()
 
 
+def mostrar_grafica():
+    plt.plot(grafica, array_maximos, 'r-', label='Maximo')
+    plt.plot(grafica, array_minimos, 'b-', label='Minimo')
+    plt.plot(grafica, array_promedios, 'g-', label='Promedio')
+    plt.xlabel('Corridas')
+    plt.ylabel('Distancia', multialignment='center')
+    plt.legend()
+    plt.suptitle("Gráfica de " + str(corridas) + " corridas")
+    plt.title("La mínima distancia alcanzada fue " + str(calcula_distancia_recorrido(recorrido_mvp)), fontsize=10)
+    plt.show()
+
+
 # Main
 resp = input('Quiere hacer elitismo (s/n): ')
 
 grafica = np.linspace(0, corridas, corridas)
 
-
 poblacion_inicial()
-# calcula_fitness_poblacion()
 recorrido_mvp = array_poblacion[0]
-# array_poblacion = ruleta()
 for cor in range(corridas):
     mayor = 0
     menor = 40000
@@ -234,7 +229,7 @@ for cor in range(corridas):
         array_elite = elite()
     crossover()
     mutacion()
-    array_poblacion = ruleta_vieja()
+    array_poblacion = ruleta()
     if resp == 's' or resp == 'S':
         for eli in range(len(array_elite)):
             array_poblacion.append(array_elite[eli])
@@ -244,16 +239,9 @@ for cor in range(corridas):
 
     array_maximos[cor] = mayor
     array_minimos[cor] = menor
-    array_promedios[cor] = promedio/tam_poblacion
+    array_promedios[cor] = promedio / tam_poblacion
 
 mostrar_mapa()
+mostrar_grafica()
 
-plt.plot(grafica, array_maximos, 'r-', label='Maximo')
-plt.plot(grafica, array_minimos, 'b-', label='Minimo')
-plt.plot(grafica, array_promedios, 'g-', label='Promedio')
-plt.xlabel('Corridas')
-plt.ylabel('Distancia', multialignment='center')
-plt.legend()
-plt.suptitle("Gráfica de " + str(corridas) + " corridas")
-#plt.title("El maximo alcanzado fue " + str(mvp_fitness[1]), fontsize=10)
-plt.show()
+
