@@ -266,5 +266,23 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+
+templates=vscode,visualstudiocode
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+### vscode ###
+
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,windows,python
 .idea/Problema-del-Viajante.iml
