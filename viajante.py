@@ -3,13 +3,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-import os
 
-corridas = 500
+corridas = 1000
 tam_poblacion = 50
 cant_ciudades = 24
-chances_crossover = 0.75
-chances_mutacion = 0.05
+chances_crossover = 0.80
+chances_mutacion = 0.90
 recorrido_mvp = [0] * cant_ciudades
 
 array_minimos = [0] * corridas
