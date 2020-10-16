@@ -4,11 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-corridas = 1000
+corridas = 200
 tam_poblacion = 50
 cant_ciudades = 24
 chances_crossover = 0.80
-chances_mutacion = 0.90
+chances_mutacion = 0.10
+porc_elitismo = 0.1
+
 recorrido_mvp = [0] * cant_ciudades
 
 array_minimos = [0] * corridas
@@ -18,7 +20,6 @@ array_promedios = [0] * corridas
 array_poblacion = [0] * tam_poblacion
 nombres_ciudades = [0] * cant_ciudades
 array_fitness = [0] * tam_poblacion
-porc_elitismo = 0.1
 tam_elitismo = int(tam_poblacion * porc_elitismo)
 tam_elitismo = tam_elitismo if tam_elitismo % 2 == 0 else tam_elitismo + 1
 
@@ -101,7 +102,7 @@ def crossover():
             array_poblacion[i + 1] = ciclico(padre2, padre1)
 
 
-def calcula_distancia_recorrido(cromosoma):  # Devuelve el fitness de un solo cromosoma
+def calcula_distancia_recorrido(cromosoma):  # Devuelve la distancia del recorrido de un solo cromosoma
     dist_recorrido = 0
     for i in range(cant_ciudades - 1):
         dist_recorrido += distancias[cromosoma[i], cromosoma[i + 1]]
